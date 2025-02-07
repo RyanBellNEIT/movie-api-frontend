@@ -4,9 +4,11 @@ import Button from "react-bootstrap/Button";
 import Container from "react-bootstrap/Container"
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
-import {NavLink} from "react-router-dom";
+import {Link, NavLink, useNavigate} from "react-router-dom";
 
 const Header = () => {
+
+    const navigate = useNavigate();
  
 return (
     <>
@@ -37,8 +39,8 @@ return (
                         <NavLink className ="nav-link" to="/">Home</NavLink>
                         <NavLink className ="nav-link" to="/watchList">Watch List</NavLink>
                     </Nav>
-                    <Button variant="outline-info" className="me-2">Login</Button>
-                    <Button variant="outline-info">Register</Button>
+                    <Button variant="outline-info" className="me-2" onClick={() => navigate('/login')}>Login</Button>
+                    <Button variant="outline-info" onClick={() => navigate('/register')}>Register</Button>
                 </Navbar.Collapse>
             </Container>
         </Navbar>
