@@ -8,10 +8,10 @@ import { error } from "ajv/dist/vocabularies/applicator/dependencies";
 
 const Register = ({username, password}) => {
 
-    const userText = useRef();
-    const passText = useRef();
-
-    const [date, setDate] = useState(new Date());
+    const [userText, setUserText] = useState('');
+    const [passText, setPassText] = useState('');
+    const [emailText, setEmailText] = useState('');
+    const [birthDate, setBirthDate] = useState(new Date());
 
     const hashPassword = async(password) =>{
         var salt = await bcrypt.genSaltSync(10);
@@ -21,17 +21,34 @@ const Register = ({username, password}) => {
         return hash;
     }
 
+    function checkSubmit(){
+        //Check password
+        if(passText == null || emailText == null){
+            return false;
+        }else{
+            return true;
+        }
+    }
+    
     const addUser = async (e) =>{
         e.preventDefault();
 
-        const usernameTxt = userText.current;
-        let passwordTxt = passText.current;
-        let dateOfBirth = date;
+        const usernameTxt = userText;
+        let passwordTxt = passText;
+        let emailTxt = emailText;
+        let dateOfBirth = birthDate;
 
+        //Format date
+
+        //var canSubmit = checkSubmit();
+
+        //console.log(canSubmit);
+;
         //Converting date for use in Java backend.
         dateOfBirth = Date.parse(dateOfBirth);
 
-        passwordTxt = hashPassword(passwordTxt.value);
+        //Hashing password and then storing hashed password into database.
+        passwordTxt = hashPassword(passwordTxt);
 
         let passwordTxtValue = "";
 
@@ -43,11 +60,13 @@ const Register = ({username, password}) => {
         }
 
         try{
-            const response = await api.post("api/v1/users", {username:usernameTxt.value, password:passwordTxtValue, birthDate:dateOfBirth});
+            const response = await api.post("api/v1/users", {username:usernameTxt, password:passwordTxtValue, email:emailTxt, birthDate:dateOfBirth});
 
-            usernameTxt.current = "";
-            passwordTxt.current = "";
-            dateOfBirth = new Date();
+            //Reset form
+            setUserText("");
+            setPassText("");
+            setEmailText("");
+            setBirthDate(new Date());
         }
         catch(err)
         {
@@ -63,16 +82,21 @@ const Register = ({username, password}) => {
                         <Form.Label>Register Account</Form.Label>
                         <Form.Group controlId="registerForm.UserInput1">
                             <Form.Label>Username</Form.Label>
-                            <Form.Control ref={userText} as="textarea" rows={1}></Form.Control>
+                            <Form.Control placeholder="Username" value={userText} onChange={(e) => setUserText(e.target.value)} as="textarea" rows={1}/>
                         </Form.Group>
                         <Form.Group controlId="registerForm.ControlPassword1">
                             <Form.Label>Password</Form.Label>
-                            <Form.Control ref={passText} as="textarea" rows={1}></Form.Control>
+                            <Form.Control type="password" placeholder="Password" value={passText} onChange={(e) => setPassText(e.target.value)} rows={1}/>
+                        </Form.Group>
+                        <Form.Group controlId="registerForm.EmailInput1">
+                            <Form.Label>Email</Form.Label>
+                            <Form.Control placeholder="Email" value={emailText} onChange={(e) => setEmailText(e.target.value)} as="textarea" rows={1}/>
                         </Form.Group>
                         <Form.Group controlId="registerForm.DateBirth1">
                             <Form.Label>Date Of Birth</Form.Label>
-                            <Form.Control type="date" name="dateOfBirth" value={date} onChange={(e) => setDate(e.target.value)}/>
+                            <Form.Control type="date" name="dateOfBirth" value={birthDate} onChange={(e) => setBirthDate(e.target.value)}/>
                         </Form.Group>
+                        <h5 id="submitError"></h5>
                         <Button variant="outline-info" onClick={addUser}>Submit</Button>
                     </Form>
                 </Row>
