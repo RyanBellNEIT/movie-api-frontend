@@ -49,7 +49,7 @@ const Register = ({username, password}) => {
             passwordTxtValue = await passwordTxt;
         }
         catch(err){
-            console.error(error);
+            console.error(err);
         }
 
         try{
