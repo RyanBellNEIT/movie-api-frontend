@@ -13,21 +13,23 @@ const Register = ({username, password}) => {
     const [emailText, setEmailText] = useState('');
     const [birthDate, setBirthDate] = useState(new Date());
 
+    const checkValid = (userText, passText, emailText, birthDate) => {
+        //Need to validate birth year as well.
+        return !!userText && !!passText && checkEmail(emailText);
+    }
+
+    const checkEmail = (emailText) => {
+        return /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/.test(emailText);
+    }
+
+    const isValid = checkValid(userText, passText, emailText, birthDate)
+
     const hashPassword = async(password) =>{
         var salt = await bcrypt.genSaltSync(10);
 
         const hash = await bcrypt.hash(password, salt);
 
         return hash;
-    }
-
-    function checkSubmit(){
-        //Check password
-        if(passText == null || emailText == null){
-            return false;
-        }else{
-            return true;
-        }
     }
     
     const addUser = async (e) =>{
@@ -37,15 +39,6 @@ const Register = ({username, password}) => {
         let passwordTxt = passText;
         let emailTxt = emailText;
         let dateOfBirth = birthDate;
-
-        //Format date
-
-        //var canSubmit = checkSubmit();
-
-        //console.log(canSubmit);
-;
-        //Converting date for use in Java backend.
-        dateOfBirth = Date.parse(dateOfBirth);
 
         //Hashing password and then storing hashed password into database.
         passwordTxt = hashPassword(passwordTxt);
@@ -97,7 +90,7 @@ const Register = ({username, password}) => {
                             <Form.Control type="date" name="dateOfBirth" value={birthDate} onChange={(e) => setBirthDate(e.target.value)}/>
                         </Form.Group>
                         <h5 id="submitError"></h5>
-                        <Button variant="outline-info" onClick={addUser}>Submit</Button>
+                        <Button variant="outline-info" onClick={addUser} disabled={!isValid}>Submit</Button>
                     </Form>
                 </Row>
             </Col>
