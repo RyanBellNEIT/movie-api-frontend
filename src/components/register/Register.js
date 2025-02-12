@@ -1,4 +1,5 @@
 import React, { useRef, useState } from "react";
+import "./Register.css";
 import api from '../../api/axiosConfig';
 import {Container, Row, Col, Form, Button} from 'react-bootstrap';
 import DatePicker from 'react-datepicker';
@@ -68,29 +69,29 @@ const Register = ({username, password}) => {
     }
 
     return(
-        <Container>
-            <Col>
-                <Row>
+        <Container className="register-container" fluid>
+            <Col className="register-col">
+                <Row className="register-row">
                     <Form>
-                        <Form.Label>Register Account</Form.Label>
-                        <Form.Group controlId="registerForm.UserInput1">
+                        <Form.Label className="mt-2 mb-2">Register Account</Form.Label>
+                        <Form.Group controlId="registerForm.UserInput1" className="mb-2">
                             <Form.Label>Username</Form.Label>
                             <Form.Control placeholder="Username" value={userText} onChange={(e) => setUserText(e.target.value)} as="textarea" rows={1}/>
                         </Form.Group>
-                        <Form.Group controlId="registerForm.ControlPassword1">
+                        <Form.Group controlId="registerForm.ControlPassword1" className="mb-2">
                             <Form.Label>Password</Form.Label>
                             <Form.Control type="password" placeholder="Password" value={passText} onChange={(e) => setPassText(e.target.value)} rows={1}/>
                         </Form.Group>
-                        <Form.Group controlId="registerForm.EmailInput1">
+                        <Form.Group controlId="registerForm.EmailInput1" className="mb-2">
                             <Form.Label>Email</Form.Label>
                             <Form.Control placeholder="Email" value={emailText} onChange={(e) => setEmailText(e.target.value)} as="textarea" rows={1}/>
                         </Form.Group>
-                        <Form.Group controlId="registerForm.DateBirth1">
+                        <Form.Group controlId="registerForm.DateBirth1" className="mb-3">
                             <Form.Label>Date Of Birth</Form.Label>
                             <Form.Control type="date" name="dateOfBirth" value={birthDate} onChange={(e) => setBirthDate(e.target.value)}/>
                         </Form.Group>
                         <h5 id="submitError"></h5>
-                        <Button variant="outline-info" onClick={addUser} disabled={!isValid}>Submit</Button>
+                        <Button variant="outline-info" onClick={addUser} disabled={!isValid} className="mb-2">Submit</Button>
                     </Form>
                 </Row>
             </Col>

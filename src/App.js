@@ -65,7 +65,6 @@ function App() {
           <Route path="*" element = {<NotFound/>}></Route>
         </Route>
       </Routes>
-
     </div>
   );
 }
