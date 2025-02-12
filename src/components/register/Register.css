@@ -18,9 +18,11 @@
 }
 
 .register-row > form{
-    background-color: rgba(38, 38, 38, 1);
+    background-color: #212529;
     border-radius: 20px;
     padding-bottom: 15px;
+    box-shadow: 2px 2px #68696a;
+    outline:  1px solid #68696a;
 }
 
 .register-row > form > label{

@@ -73,25 +73,24 @@ const Register = ({username, password}) => {
             <Col className="register-col">
                 <Row className="register-row">
                     <Form>
-                        <Form.Label className="mt-2 mb-2">Register Account</Form.Label>
+                        <Form.Label className="mt-2 mb-2">Sign Up</Form.Label>
                         <Form.Group controlId="registerForm.UserInput1" className="mb-2">
-                            <Form.Label>Username</Form.Label>
-                            <Form.Control placeholder="Username" value={userText} onChange={(e) => setUserText(e.target.value)} as="textarea" rows={1}/>
+                            <Form.Label className="mb-0">Username</Form.Label>
+                            <Form.Control value={userText} onChange={(e) => setUserText(e.target.value)} as="textarea" rows={1}/>
                         </Form.Group>
                         <Form.Group controlId="registerForm.ControlPassword1" className="mb-2">
-                            <Form.Label>Password</Form.Label>
-                            <Form.Control type="password" placeholder="Password" value={passText} onChange={(e) => setPassText(e.target.value)} rows={1}/>
+                            <Form.Label className="mb-0">Password</Form.Label>
+                            <Form.Control type="password" value={passText} onChange={(e) => setPassText(e.target.value)} rows={1}/>
                         </Form.Group>
                         <Form.Group controlId="registerForm.EmailInput1" className="mb-2">
-                            <Form.Label>Email</Form.Label>
-                            <Form.Control placeholder="Email" value={emailText} onChange={(e) => setEmailText(e.target.value)} as="textarea" rows={1}/>
+                            <Form.Label className="mb-0">Email</Form.Label>
+                            <Form.Control value={emailText} onChange={(e) => setEmailText(e.target.value)} as="textarea" rows={1}/>
                         </Form.Group>
                         <Form.Group controlId="registerForm.DateBirth1" className="mb-3">
-                            <Form.Label>Date Of Birth</Form.Label>
+                            <Form.Label className="mb-0">Date Of Birth</Form.Label>
                             <Form.Control type="date" name="dateOfBirth" value={birthDate} onChange={(e) => setBirthDate(e.target.value)}/>
                         </Form.Group>
-                        <h5 id="submitError"></h5>
-                        <Button variant="outline-info" onClick={addUser} disabled={!isValid} className="mb-2">Submit</Button>
+                        <Button variant="outline-info" onClick={addUser} disabled={!isValid} className="mb-2">Sign Up</Button>
                     </Form>
                 </Row>
             </Col>
