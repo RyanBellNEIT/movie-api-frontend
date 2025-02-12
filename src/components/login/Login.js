@@ -2,55 +2,58 @@ import React, { useRef, useState } from "react";
 import "./Login.css";
 import api from '../../api/axiosConfig';
 import {Container, Row, Col, Form, Button} from 'react-bootstrap';
-import DatePicker from 'react-datepicker';
 import bcrypt from "bcryptjs-react";
-import { error } from "ajv/dist/vocabularies/applicator/dependencies";
-import { red } from "@mui/material/colors";
+import { useNavigate } from 'react-router-dom';
 
 
-const Login = ({username, password}) => {
+const Login = () => {
 
-    const [userText, setUserText] = useState('');
+    const navigate = useNavigate();
+
+    const [emailText, setEmailText] = useState('');
     const [passText, setPassText] = useState('');
+    const [notFoundError, setNotFoundError] = useState('');
 
-    const checkValid = (userText, passText) => {
+    const checkValid = (emailText, passText) => {
         //Need to validate birth year as well.
-        return !!userText && !!passText;
+        return !!passText && checkEmail(emailText);
     }
 
-    const isValid = checkValid(userText, passText)
-
-    const hashPassword = async(password) =>{
-        var salt = await bcrypt.genSaltSync(10);
-
-        const hash = await bcrypt.hash(password, salt);
-
-        return hash;
+    const checkEmail = (emailText) => {
+        return /^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/.test(emailText);
     }
+
+    const isValid = checkValid(emailText, passText)
     
-    const getUser = async (e, username) =>{
+    const getUser = async (e) =>{
         e.preventDefault();
 
-        const usernameTxt = userText;
+        const emailTxt = emailText.toLowerCase();
         let passwordTxt = passText;
 
-        //Hashing password and then storing hashed password into database.
-        passwordTxt = hashPassword(passwordTxt);
-
-        let passwordTxtValue = "";
-
         try{
-            passwordTxtValue = await passwordTxt;
-        }
-        catch(err){
-            console.error(err);
-        }
+            const response = await api.get(`api/v1/users/${emailTxt}`);
 
-        try{
-            const response = await api.get(`api/v1/users/${username}`);
+            //If found user
+            if(response.data != null){
+                //Checking if passwords match found user.
+                const match = bcrypt.compareSync(passwordTxt, response.data.password);
+
+                if(match){
+                    setNotFoundError('')
+                    //Can login
+                    console.log("Login Success!!")
+                    navigate("/");
+                }else{
+                    //Password does not match.
+                    setNotFoundError('Email or password incorrect!');
+                }
+            }else{
+                setNotFoundError('Email or password incorrect!');
+            }
 
             //Reset form
-            setUserText("");
+            setEmailText("");
             setPassText("");
         }
         catch(err)
@@ -65,13 +68,14 @@ const Login = ({username, password}) => {
                 <Row className="login-row">
                     <Form>
                         <Form.Label className="mt-2 mb-2">Login</Form.Label>
+                        {notFoundError && (<Form.Label className="text-danger" style={{fontSize: '20px'}}>{notFoundError}</Form.Label>)}
                         <Form.Group controlId="loginForm.UserInput1" className="mb-2">
-                            <Form.Label className="mb-0">Username</Form.Label>
-                            <Form.Control value={userText} onChange={(e) => setUserText(e.target.value)} as="textarea" rows={1} maxLength={30}/>
+                            <Form.Label className="mb-0">Email</Form.Label>
+                            <Form.Control required value={emailText} onChange={(e) => setEmailText(e.target.value)} as="textarea" rows={1}/>
                         </Form.Group>
                         <Form.Group controlId="loginForm.ControlPassword1" className="mb-3">
                             <Form.Label className="mb-0">Password</Form.Label>
-                            <Form.Control type="password" value={passText} onChange={(e) => setPassText(e.target.value)} rows={1}/>
+                            <Form.Control required type="password" value={passText} onChange={(e) => setPassText(e.target.value)} rows={1}/>
                         </Form.Group>
                         <Button variant="outline-info" onClick={getUser} disabled={!isValid} className="mb-2">Login</Button>
                     </Form>

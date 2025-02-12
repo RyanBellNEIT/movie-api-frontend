@@ -7,7 +7,7 @@ import bcrypt from "bcryptjs-react";
 import { error } from "ajv/dist/vocabularies/applicator/dependencies";
 
 
-const Register = ({username, password}) => {
+const Register = () => {
 
     const [userText, setUserText] = useState('');
     const [passText, setPassText] = useState('');
@@ -28,7 +28,7 @@ const Register = ({username, password}) => {
     const hashPassword = async(password) =>{
         var salt = await bcrypt.genSaltSync(10);
 
-        const hash = await bcrypt.hash(password, salt);
+        const hash = await bcrypt.hashSync(password, salt);
 
         return hash;
     }
@@ -38,7 +38,7 @@ const Register = ({username, password}) => {
 
         const usernameTxt = userText;
         let passwordTxt = passText;
-        let emailTxt = emailText;
+        let emailTxt = emailText.toLowerCase();
         let dateOfBirth = birthDate;
 
         //Hashing password and then storing hashed password into database.
