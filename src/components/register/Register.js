@@ -14,7 +14,14 @@ const Register = () => {
     const [birthDate, setBirthDate] = useState();
 
     const checkValid = (emailText, birthDate) => {
-        console.log(birthDate);
+        var birthDateValid = (new Date(birthDate) <= new Date() && new Date(birthDate).getFullYear() >= 1900);
+
+        if (birthDateValid == false){
+            document.getElementById("error-text").innerHTML = "Date cannot be date in the future or before the year 1900.";
+        }else{
+            document.getElementById("error-text").innerHTML = "";
+        }
+
         return checkEmail(emailText) && isPasswordValid && (new Date(birthDate) <= new Date()) && (new Date(birthDate).getFullYear() >= 1900);
     }
 
@@ -38,8 +45,6 @@ const Register = () => {
     
     const addUser = async (e) =>{
         e.preventDefault();
-
-        console.log(birthDate);
 
         let emailTxt = emailText.toLowerCase();
         let passwordTxt = passText;
@@ -87,8 +92,8 @@ const Register = () => {
                         <Form.Label className="mt-2 mb-2">Sign Up</Form.Label>
                         <Form.Group controlId="registerForm.EmailInput1" className="mb-2">
                             <h5 id="error-text" style={{color: "#d60000"}}></h5>
-                            <Form.Label className="mb-0">Email</Form.Label>
-                            <Form.Control value={emailText} onChange={(e) => setEmailText(e.target.value)} as="textarea" rows={1}/>
+                            <Form.Label style={{resize: 'none'}} className="mb-0">Email</Form.Label>
+                            <Form.Control type="text" value={emailText} onChange={(e) => setEmailText(e.target.value)} as="textarea" rows={1}/>
                         </Form.Group>
                         <Form.Group controlId="registerForm.ControlPassword1" className="mb-2">
                             <Form.Label className="mb-0">Password</Form.Label>
