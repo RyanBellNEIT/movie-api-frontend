@@ -92,7 +92,7 @@ const Register = () => {
                         <Form.Label className="mt-2 mb-2">Sign Up</Form.Label>
                         <Form.Group controlId="registerForm.EmailInput1" className="mb-2">
                             <h5 id="error-text" style={{color: "#d60000"}}></h5>
-                            <Form.Label style={{resize: 'none'}} className="mb-0">Email</Form.Label>
+                            <Form.Label className="mb-0">Email</Form.Label>
                             <Form.Control type="text" value={emailText} onChange={(e) => setEmailText(e.target.value)} as="textarea" rows={1}/>
                         </Form.Group>
                         <Form.Group controlId="registerForm.ControlPassword1" className="mb-2">
