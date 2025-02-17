@@ -24,37 +24,19 @@ const Register = () => {
     }
 
     const isValid = checkValid(userText, passText, emailText, birthDate)
-
-    const hashPassword = async(password) =>{
-        var salt = await bcrypt.genSaltSync(10);
-
-        const hash = await bcrypt.hashSync(password, salt);
-
-        return hash;
-    }
     
     const addUser = async (e) =>{
         e.preventDefault();
 
-        const usernameTxt = userText;
+        let usernameTxt = userText;
         let passwordTxt = passText;
         let emailTxt = emailText.toLowerCase();
         let dateOfBirth = birthDate;
 
-        //Hashing password and then storing hashed password into database.
-        passwordTxt = hashPassword(passwordTxt);
-
-        let passwordTxtValue = "";
+        //Password should be hashed at the backend.
 
         try{
-            passwordTxtValue = await passwordTxt;
-        }
-        catch(err){
-            console.error(err);
-        }
-
-        try{
-            const response = await api.post("api/v1/users", {username:usernameTxt, password:passwordTxtValue, email:emailTxt, birthDate:dateOfBirth});
+            const response = await api.post("api/v1/users", {username:usernameTxt, password:passwordTxt, email:emailTxt, birthDate:dateOfBirth});
 
             //Reset form
             setUserText("");

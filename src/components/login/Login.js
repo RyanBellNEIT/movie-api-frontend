@@ -4,18 +4,17 @@ import api from '../../api/axiosConfig';
 import {Container, Row, Col, Form, Button} from 'react-bootstrap';
 import bcrypt from "bcryptjs-react";
 import { useNavigate } from 'react-router-dom';
-
+import { useAuth } from "../../api/AuthProvider";
 
 const Login = () => {
 
-    const navigate = useNavigate();
+    const auth = useAuth();
 
     const [emailText, setEmailText] = useState('');
     const [passText, setPassText] = useState('');
     const [notFoundError, setNotFoundError] = useState('');
 
     const checkValid = (emailText, passText) => {
-        //Need to validate birth year as well.
         return !!passText && checkEmail(emailText);
     }
 
@@ -32,25 +31,29 @@ const Login = () => {
         let passwordTxt = passText;
 
         try{
-            const response = await api.get(`api/v1/users/${emailTxt}`);
+            
+            auth.loginAction(emailTxt, passwordTxt);
 
-            //If found user
-            if(response.data != null){
-                //Checking if passwords match found user.
-                const match = bcrypt.compareSync(passwordTxt, response.data.password);
+            //const response = await api.get(`api/v1/users/${emailTxt}`);
 
-                if(match){
-                    setNotFoundError('')
-                    //Can login
-                    console.log("Login Success!!")
-                    navigate("/");
-                }else{
-                    //Password does not match.
-                    setNotFoundError('Email or password incorrect!');
-                }
-            }else{
-                setNotFoundError('Email or password incorrect!');
-            }
+            ////If found user
+            //if(response.data != null){
+            //    //Checking if passwords match found user.
+            //    const match = bcrypt.compareSync(passwordTxt, response.data.password);
+
+            //    if(match){
+            //        setNotFoundError('')
+            //        //Can login
+            //        console.log("Login Success!!")
+            //        //Handle User Authorization login request.
+
+            //    }else{
+            //        //Password does not match.
+            //        setNotFoundError('Email or password incorrect!');
+            //    }
+            //}else{
+            //    setNotFoundError('Email or password incorrect!');
+            //}
 
             //Reset form
             setEmailText("");
