@@ -28,7 +28,7 @@ const Login = () => {
         e.preventDefault();
 
         const emailTxt = emailText.toLowerCase();
-        let passwordTxt = passText;
+        const passwordTxt = passText;
 
         try{
             

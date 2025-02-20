@@ -10,22 +10,35 @@ const AuthProvider = ({children}) => {
     const [notFoundError, setNotFoundError] = useState('');
     const navigate = useNavigate();
 
-    const loginAction = async (email, password) => {
-        try{    
-            const response = await api.post("/api/v1/users/login", {email: email.toLowerCase(), password: password});
+    const loginAction = async (emailTxt, passwordTxt) => {
+        try{
+            const response = await api.post("api/v1/users/login", {email: emailTxt.toLowerCase(), password: passwordTxt});
 
             if(response.data){
                 setUser(response.data.user);
                 setToken(response.data.token);
                 localStorage.setItem("site", response.data.token);
                 setNotFoundError('');
+                console.log("Successful login");
                 navigate('');
                 return;
             }else{
                 setNotFoundError('Email or password incorrect!');
             }
-        }catch(err){
-            console.log(err);
+        }catch (err) {
+            if (err.response) {
+                if (err.response.status === 401) {
+                    setNotFoundError('Email or password incorrect!');
+                } else {
+                    setNotFoundError('An error occurred. Please try again later.');
+                }
+            } else if (err.request) {
+                setNotFoundError('No response from server. Please check your network connection.');
+            } else {
+                setNotFoundError('An error occurred. Please try again later.');
+            }
+            console.error(err);
+            console.log(notFoundError);
         }
     };
 
