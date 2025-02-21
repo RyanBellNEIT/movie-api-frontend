@@ -1,31 +1,37 @@
-import { useContext, createContext, useState } from "react";
+import { useContext, createContext, useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from '../api/axiosConfig';
 
 const AuthContext = createContext();
 
-const AuthProvider = ({children}) => {
+const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [token, setToken] = useState(localStorage.getItem("site") || "");
     const [notFoundError, setNotFoundError] = useState('');
     const navigate = useNavigate();
 
-    const loginAction = async (emailTxt, passwordTxt) => {
-        try{
-            const response = await api.post("api/v1/users/login", {email: emailTxt.toLowerCase(), password: passwordTxt});
+    const loginAction = async (emailTxt, passwordTxt) =>{
+        try {
+            const response = await api.post("api/v1/users/login", 
+                { email: emailTxt.toLowerCase(), password: passwordTxt },
+                { headers: { "Content-Type": "application/json" }});
 
-            if(response.data){
-                setUser(response.data.user);
-                setToken(response.data.token);
-                localStorage.setItem("site", response.data.token);
+            if (response.data) {
+
+                const authToken = response.headers['authorization'].substring(7);
+                setToken(authToken);
+                setUser(response.data);
+                
+                localStorage.setItem("site", authToken);
+
                 setNotFoundError('');
                 console.log("Successful login");
-                navigate('');
+                navigate('/');
                 return;
-            }else{
+            } else {
                 setNotFoundError('Email or password incorrect!');
             }
-        }catch (err) {
+        } catch (err) {
             if (err.response) {
                 if (err.response.status === 401) {
                     setNotFoundError('Email or password incorrect!');
@@ -38,7 +44,6 @@ const AuthProvider = ({children}) => {
                 setNotFoundError('An error occurred. Please try again later.');
             }
             console.error(err);
-            console.log(notFoundError);
         }
     };
 
@@ -49,15 +54,15 @@ const AuthProvider = ({children}) => {
         navigate('/login');
     };
 
-    return(
-        <AuthContext.Provider value={{token, user, notFoundError, loginAction, logOutAction}}>
+    return (
+        <AuthContext.Provider value={{ token, user, notFoundError, loginAction, logOutAction}}>
             {children}
         </AuthContext.Provider>
-    )
+    );
 };
 
 export default AuthProvider;
 
 export const useAuth = () => {
     return useContext(AuthContext);
-  };
+};

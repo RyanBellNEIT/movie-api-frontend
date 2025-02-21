@@ -1,18 +1,13 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import "./Login.css";
-import api from '../../api/axiosConfig';
 import {Container, Row, Col, Form, Button} from 'react-bootstrap';
-import bcrypt from "bcryptjs-react";
-import { useNavigate } from 'react-router-dom';
 import { useAuth } from "../../api/AuthProvider";
 
 const Login = () => {
 
-    const auth = useAuth();
-
     const [emailText, setEmailText] = useState('');
     const [passText, setPassText] = useState('');
-    const [notFoundError, setNotFoundError] = useState('');
+    const {user, loginAction, notFoundError} = useAuth();
 
     const checkValid = (emailText, passText) => {
         return !!passText && checkEmail(emailText);
@@ -31,36 +26,12 @@ const Login = () => {
         const passwordTxt = passText;
 
         try{
-            
-            auth.loginAction(emailTxt, passwordTxt);
-
-            //const response = await api.get(`api/v1/users/${emailTxt}`);
-
-            ////If found user
-            //if(response.data != null){
-            //    //Checking if passwords match found user.
-            //    const match = bcrypt.compareSync(passwordTxt, response.data.password);
-
-            //    if(match){
-            //        setNotFoundError('')
-            //        //Can login
-            //        console.log("Login Success!!")
-            //        //Handle User Authorization login request.
-
-            //    }else{
-            //        //Password does not match.
-            //        setNotFoundError('Email or password incorrect!');
-            //    }
-            //}else{
-            //    setNotFoundError('Email or password incorrect!');
-            //}
+            await loginAction(emailTxt, passwordTxt);
 
             //Reset form
             setEmailText("");
             setPassText("");
-        }
-        catch(err)
-        {
+        }catch(err){
             console.error(err);
         }
     }

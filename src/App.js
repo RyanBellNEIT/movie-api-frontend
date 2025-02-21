@@ -11,6 +11,7 @@ import NotFound from './components/notFound/NotFound';
 import Login from './components/login/Login';
 import Register from './components/register/Register';
 import AuthProvider from './api/AuthProvider';
+import ProtectedRoute from './components/ProtectedRoute';
 
 
 function App() {
@@ -62,8 +63,9 @@ function App() {
             <Route path='/' element={<Home movies={movies}/>}></Route>
             <Route path='/trailer/:ytTrailerId' element={<Trailer/>}></Route>
             <Route path='/reviews/:movieId' element ={<Reviews getMovieData={getMovieData} movie={movie}  reviews={reviews} setReviews={setReviews}/>}></Route>
-            <Route path='/login' element={<Login/>}></Route>
+            <Route path='/login' element={<Login />}></Route>
             <Route path='/register' element={<Register/>}></Route>
+            <Route path='/profile' element={<ProtectedRoute></ProtectedRoute>}></Route>
             <Route path="*" element = {<NotFound/>}></Route>
           </Route>
         </Routes>
