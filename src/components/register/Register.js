@@ -12,16 +12,16 @@ const Register = () => {
     const [passText, setPassText] = useState('');
     const [isPasswordValid, setIsPasswordValid] = useState(false);
     const [birthDate, setBirthDate] = useState();
-
+  
     const checkValid = (emailText, birthDate) => {
         var birthDateValid = (new Date(birthDate) <= new Date() && new Date(birthDate).getFullYear() >= 1900);
 
-        if (birthDateValid == false){
-            document.getElementById("error-text").innerHTML = "Date cannot be date in the future or before the year 1900.";
-        }else{
-            document.getElementById("error-text").innerHTML = "";
-        }
-
+        //if (birthDateValid == false){
+        //    document.getElementById("error-text").innerHTML = "Date cannot be date in the future or before the year 1900.";
+        //}else{
+        //    document.getElementById("error-text").innerHTML = "";
+        //}
+      
         return checkEmail(emailText) && isPasswordValid && (new Date(birthDate) <= new Date()) && (new Date(birthDate).getFullYear() >= 1900);
     }
 

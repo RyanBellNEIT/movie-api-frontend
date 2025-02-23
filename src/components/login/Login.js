@@ -1,21 +1,15 @@
-import React, { useRef, useState } from "react";
+import React, { useState } from "react";
 import "./Login.css";
-import api from '../../api/axiosConfig';
 import {Container, Row, Col, Form, Button} from 'react-bootstrap';
-import bcrypt from "bcryptjs-react";
-import { useNavigate } from 'react-router-dom';
-
+import { useAuth } from "../../api/AuthProvider";
 
 const Login = () => {
 
-    const navigate = useNavigate();
-
     const [emailText, setEmailText] = useState('');
     const [passText, setPassText] = useState('');
-    const [notFoundError, setNotFoundError] = useState('');
+    const {user, loginAction, notFoundError} = useAuth();
 
     const checkValid = (emailText, passText) => {
-        //Need to validate birth year as well.
         return !!passText && checkEmail(emailText);
     }
 
@@ -29,35 +23,15 @@ const Login = () => {
         e.preventDefault();
 
         const emailTxt = emailText.toLowerCase();
-        let passwordTxt = passText;
+        const passwordTxt = passText;
 
         try{
-            const response = await api.get(`api/v1/users/${emailTxt}`);
-
-            //If found user
-            if(response.data != null){
-                //Checking if passwords match found user.
-                const match = bcrypt.compareSync(passwordTxt, response.data.password);
-
-                if(match){
-                    setNotFoundError('')
-                    //Can login
-                    console.log("Login Success!!")
-                    navigate("/");
-                }else{
-                    //Password does not match.
-                    setNotFoundError('Email or password incorrect!');
-                }
-            }else{
-                setNotFoundError('Email or password incorrect!');
-            }
+            await loginAction(emailTxt, passwordTxt);
 
             //Reset form
             setEmailText("");
             setPassText("");
-        }
-        catch(err)
-        {
+        }catch(err){
             console.error(err);
         }
     }
