@@ -34,14 +34,6 @@ const Register = () => {
     }
 
     const isValid = checkValid(emailText, birthDate);
-
-    const hashPassword = async(password) =>{
-        var salt = await bcrypt.genSaltSync(10);
-
-        const hash = await bcrypt.hashSync(password, salt);
-
-        return hash;
-    }
     
     const addUser = async (e) =>{
         e.preventDefault();
@@ -50,20 +42,8 @@ const Register = () => {
         let passwordTxt = passText;
         let dateOfBirth = birthDate;
 
-        //Hashing password and then storing hashed password into database.
-        passwordTxt = hashPassword(passwordTxt);
-
-        let passwordTxtValue = "";
-
         try{
-            passwordTxtValue = await passwordTxt;
-        }
-        catch(err){
-            console.error(err);
-        }
-
-        try{
-            const response = await api.post("api/v1/users", {email:emailTxt, password:passwordTxtValue, birthDate:dateOfBirth});
+            const response = await api.post("api/v1/users/register", {email:emailTxt, password:passwordTxt, birthDate:dateOfBirth});
 
             if(response.status = HttpStatusCode.Ok){
                 console.log("Successfully registered");
