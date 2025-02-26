@@ -1,0 +1,50 @@
+.profile-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.profile-container {
+    display: flex;
+    background-color: #212529;
+    width: 60vw;
+    height: 80vh;
+    border-radius: 30px;
+    gap: 33%;
+    flex-direction: column;
+    align-items: center;
+}
+
+.profile-info {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 15%;
+    width: 60%;
+}
+
+.profile-info img {
+    width: auto;
+    height: 75px;
+    aspect-ratio: 1 / 1;
+    clip-path: circle();
+    margin-right: 10px;
+}
+
+.profile-info h2 {
+    font-size: 1em;
+    margin: 0;
+    color: #727272;
+}
+
+.profile-info > #settings-icon {
+    margin-left: auto;
+    cursor: pointer;
+    height: 25px;
+    aspect-ratio: 1 / 1;
+}
+
+.profile-favorite-movies{
+    justify-content: center;
+}

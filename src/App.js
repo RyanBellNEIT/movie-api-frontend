@@ -10,6 +10,7 @@ import Reviews from './components/reviews/Reviews';
 import NotFound from './components/notFound/NotFound';
 import Login from './components/login/Login';
 import Register from './components/register/Register';
+import Profile from './components/profile/Profile';
 import AuthProvider from './api/AuthProvider';
 import ProtectedRoute from './components/ProtectedRoute';
 
@@ -65,7 +66,7 @@ function App() {
             <Route path='/reviews/:movieId' element ={<Reviews getMovieData={getMovieData} movie={movie}  reviews={reviews} setReviews={setReviews}/>}></Route>
             <Route path='/login' element={<Login />}></Route>
             <Route path='/register' element={<Register/>}></Route>
-            <Route path='/profile' element={<ProtectedRoute></ProtectedRoute>}></Route>
+            <Route path='/profile' element={<ProtectedRoute><Profile/></ProtectedRoute>}></Route>
             <Route path="*" element = {<NotFound/>}></Route>
           </Route>
         </Routes>
