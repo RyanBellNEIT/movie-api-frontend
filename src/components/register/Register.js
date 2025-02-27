@@ -12,6 +12,8 @@ const Register = () => {
     const [passText, setPassText] = useState('');
     const [isPasswordValid, setIsPasswordValid] = useState(false);
     const [birthDate, setBirthDate] = useState();
+    const [statusText, setStatusText] = useState(''); 
+    const [statusColor, setStatusColor] = useState('');
   
     const checkValid = (emailText, birthDate) => {
         var birthDateValid = (new Date(birthDate) <= new Date() && new Date(birthDate).getFullYear() >= 1900);
@@ -47,7 +49,8 @@ const Register = () => {
 
             if(response.status = HttpStatusCode.Ok){
                 console.log("Successfully registered");
-                document.getElementById("error-text").innerHTML = "";
+                setStatusText("Successfully registered!");
+                setStatusColor("limegreen");
 
                 //Reset form
                 setEmailText("");
@@ -57,10 +60,21 @@ const Register = () => {
         }
         catch(err)
         {
-            if(err.status == HttpStatusCode.Conflict){
+            if(err.response && err.status == HttpStatusCode.Conflict){
                 console.error("Account already exists");
-                document.getElementById("error-text").innerHTML = "An account with the specified email already exists!";
+                setStatusText("An account with the specified email already exists!");
+                setStatusColor("red");
+            }else{
+                console.error(err);
+                setStatusText("An error occurred. Please try again later.");
+                setStatusColor("red");
             }
+        }
+    }
+
+    const handleKeyDown = (e) => {
+        if (!isValid && e.key === 'Enter') {
+            e.preventDefault();
         }
     }
 
@@ -68,10 +82,10 @@ const Register = () => {
         <Container className="register-container" fluid>
             <Col className="register-col">
                 <Row className="register-row">
-                    <Form>
+                    <Form onSubmit={addUser} onKeyDown={handleKeyDown}>
                         <Form.Label className="mt-2 mb-2">Sign Up</Form.Label>
+                        {statusText && <h5 style={{ color: statusColor, textAlign: "center", width: "100%"}}>{statusText}</h5>}
                         <Form.Group controlId="registerForm.EmailInput1" className="mb-2">
-                            <h5 id="error-text" style={{color: "#d60000"}}></h5>
                             <Form.Label className="mb-0">Email</Form.Label>
                             <Form.Control type="text" value={emailText} onChange={(e) => setEmailText(e.target.value)} as="textarea" rows={1}/>
                         </Form.Group>
@@ -85,7 +99,7 @@ const Register = () => {
                             <Form.Label className="mb-0">Date Of Birth</Form.Label>
                             <Form.Control min={"1900-01-01"} type="date" onChange={(e) => setBirthDate(e.target.value)}/>
                         </Form.Group>
-                        <Button variant="outline-info" onClick={addUser} disabled={!isValid} className="mb-2">Sign Up</Button>
+                        <Button variant="outline-info" type="submit" onClick={addUser} disabled={!isValid} className="mb-2">Sign Up</Button>
                     </Form>
                 </Row>
             </Col>

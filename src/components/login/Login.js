@@ -36,11 +36,17 @@ const Login = () => {
         }
     }
 
+    const handleKeyDown = (e) => {
+        if (!isValid && e.key === 'Enter') {
+            e.preventDefault();
+        }
+    }
+
     return(
         <Container className="login-container" fluid>
             <Col className="login-col">
                 <Row className="login-row">
-                    <Form>
+                    <Form onSubmit={getUser} onKeyDown={handleKeyDown}>
                         <Form.Label className="mt-2 mb-2">Login</Form.Label>
                         {notFoundError && (<Form.Label className="text-danger" style={{fontSize: '20px'}}>{notFoundError}</Form.Label>)}
                         <Form.Group controlId="loginForm.UserInput1" className="mb-2">
